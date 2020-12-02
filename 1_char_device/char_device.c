@@ -45,7 +45,7 @@ static ssize_t chrtest_read(struct file * p_file, char __user * p_buf, size_t cn
 {
     int retvalue;
 
-    retvalue = copy_to_user(p_buf, &dev_data[p_offt], cnt);
+    retvalue = copy_to_user(p_buf, &dev_data[*p_offt], cnt);
 	if(retvalue == 0)
     {
 		printk("kernel send data ok!\r\n");
@@ -69,11 +69,11 @@ static ssize_t chrtest_write(struct file *p_file, const char __user * p_buf, siz
 {
     int retvalue;
 
-    retvalue = copy_from_user(&dev_data[p_offt], p_buf, cnt);
+    retvalue = copy_from_user(&dev_data[*p_offt], p_buf, cnt);
 
 	if(retvalue == 0)
     {
-		printk("kernel recevdata:%s\r\n", writebuf);
+		printk("kernel recevdata:%s\r\n", p_buf);
 	}
     else
     {
