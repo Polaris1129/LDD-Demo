@@ -1,20 +1,23 @@
+.PHONY : all app clean
 
+obj-m := misc_drv.o
 
-obj-m := char_device.o
-
-#内核源码路径，当编译为X86 的驱动时候使用以下这个路径
 KDIR :=/lib/modules/$(shell uname -r)/build
 
+APP_SRC := misc_app.c
+APP_NAME := misc_app
 
-#X86内核源码目录
-#KDIR=/lib/modules/`uname -r`/build 
+cp_dir :=$(PWD)
 
-cp_dir :=~/Desktop/
-
-all:
+all: app
 	@make -C $(KDIR) M=$(PWD) modules   
 	@rm -fr  .tmp_versions *.o *.mod.o *.mod.c  *.bak *.symvers *.markers *.unsigned *.order *~ .*.*.cmd .*.*.*.cmd
-	@cp -fv *.ko ${cp_dir}
+	gcc $(APP_SRC) -o $(APP_NAME)
+	insmod misc_drv.ko
+
+app:
+	gcc $(APP_SRC) -o $(APP_NAME)
+
 clean:
 	@make -C  $(KDIR)   M=$(PWD)  modules  clean
 	@rm -f *.ko *.o *.mod.o *.mod.c  *.bak *.symvers *.markers *.unsigned *.order *~
