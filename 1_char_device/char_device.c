@@ -2,6 +2,7 @@
 #include <linux/ide.h>
 #include <linux/init.h>
 #include <linux/module.h>
+#include <linux/stat.h>
 
 static int chrtest_open(struct inode *inode, struct file *filp);
 static ssize_t chrtest_read(struct file *filp, char __user *buf, size_t cnt, loff_t *offt);
@@ -94,7 +95,8 @@ static int chrtest_release(struct inode* p_inode, struct file * p_file)
 
 static int __init chrtest_init(void)
 {
-    alloc_chrdev_region(&chr_dev_num, 0, 1, "chr_test");
+    // alloc_chrdev_region(&chr_dev_num, 0, 1, "chr_test");
+    printk("install module : char_device\r\n");
     return 0;
 }
 
@@ -105,7 +107,9 @@ static int __init chrtest_init(void)
 */
 static void __exit chrtest_exit(void)
 {
-    unregister_chrdev_region(&chr_dev_num, 1);
+    printk("uninstall module : char_device");
+
+    // unregister_chrdev_region(&chr_dev_num, 1);
 }
 
 module_init(chrtest_init);
